@@ -9,20 +9,20 @@
 ###############################################################################
 
 ###################
-# BEGIN: Required Contants
+# BEGIN: Contants
 ###################
 #HomeAssistant URL
 $HA_URL = ""
 #HomeAssistant Long Lived Token
 $HA_TOKEN = ""
-#Source light (HomeAssistant entity_id) that we will mirror when our main condtions are not met
+#Source light that we will mirror when our main condtions are not met
 $SOURCE_LIGHT = "light.hallway_1"
-#Destination status light (HomeAssistant entity_id) that we are manipulating when our main conditions are met
+#Destination status light that we are manipulating when our main conditions are met
 $DESTINATION_LIGHT = "light.hallway_3"
 #Full path to SoundVolumeView.exe (download from: https://www.nirsoft.net/utils/soundvolumeview-x64.zip)
 $SOUNDVOLUMEVIEW = ""
 ###################
-# END: Required Contants
+# END: Contants
 ###################
 
 
@@ -48,7 +48,6 @@ function GET_LIGHT_STATE () {
 		if ($?) {
 			#If the light is on AND in "rgb_color" mode, capture the current rgb color code
 			$Global:CURRENT_COLOR = ($CURRENT_JSON.psobject.properties.value|findstr "rgb_color").replace(' ','').replace('rgb_color:','').replace('{','[ ').replace('}',' ]').replace(',',', ')
-
 		} else {
 			#If the light is on AND NOT in "rgb_color" mode, set color state to soft white
 			$Global:CURRENT_COLOR = "[ 255, 205, 120 ]"
