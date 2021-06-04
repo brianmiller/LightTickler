@@ -13,9 +13,9 @@
 
 ##Constants
 #HomeAssistant Long Lived Token
-HA_TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyNzRmMDJmNjE4NTc0ZDllOWE0ZDFhMGExNmNiZGI5ZSIsImlhdCI6MTYxNDg5NjE4NywiZXhwIjoxOTMwMjU2MTg3fQ.oyGxzHE2tpNejNIoWuLRIHd3nEh7CcNRmKDPwbRIjNw"
+HA_TOKEN=""
 #HomeAssistant URL
-HA_URL="http://37648-homeassistant1.phospher.com:8123"
+HA_URL=""
 #Camera device
 CAMERA=/dev/video0
 
