@@ -12,15 +12,15 @@
 # BEGIN: Contants
 ###################
 #HomeAssistant URL
-$HA_URL = ""
+$HA_URL = "http://37648-homeassistant1.phospher.com:8123"
 #HomeAssistant Long Lived Token
-$HA_TOKEN = ""
+$HA_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyNzRmMDJmNjE4NTc0ZDllOWE0ZDFhMGExNmNiZGI5ZSIsImlhdCI6MTYxNDg5NjE4NywiZXhwIjoxOTMwMjU2MTg3fQ.oyGxzHE2tpNejNIoWuLRIHd3nEh7CcNRmKDPwbRIjNw"
 #Source light that we will mirror when our main condtions are not met
 $SOURCE_LIGHT = "light.hallway_1"
 #Destination status light that we are manipulating when our main conditions are met
 $DESTINATION_LIGHT = "light.hallway_3"
 #Full path to SoundVolumeView.exe (download from: https://www.nirsoft.net/utils/soundvolumeview-x64.zip)
-$SOUNDVOLUMEVIEW = ""
+$SOUNDVOLUMEVIEW = "C:\Users\brian\Downloads\SoundVolumeView.exe"
 ###################
 # END: Contants
 ###################
@@ -70,19 +70,30 @@ while($true) {
 	sleep 1
 	
 	#Is there an active Zoom running?  We use SoundVolumeView.exe to determine if a Zoom meeting is active
-	
 	& $SOUNDVOLUMEVIEW /stab "" | .\GetNir "."|findstr /I "Zoom"|findstr /I "Capture" 2>&1 > $null
 	$ZOOM_RESULT=$?
+	
+	#Is Valheim running?
+	Get-Process valheim 2>$1 > $null
+	$VALHEIM_RESULT=$?
 	
 	#Always check current state of light to be mirrored
 	GET_LIGHT_STATE
 
 	#Main contional evaluation
-	if($ZOOM_RESULT) {
+	if($ZOOM_RESULT -And $VALHEIM_RESULT) {
+		echo "A Zoom meeting and Valheim are running..."
+		#If Valheim AND a Zoom session are running, set status light to blue
+		$JSON = '{"entity_id": "'+$DESTINATION_LIGHT+'", "brightness": 255,"rgb_color": [ 0, 0, 255 ] }'
+		Invoke-RestMethod -ContentType "application/json" -Uri $HA_URL/api/services/light/turn_on -Method POST -Headers $headers -Body $JSON 2>&1 > $null
+		
+	} elseif($ZOOM_RESULT) {
 		#If a Zoom meeting is running, set status light to red
 		echo "A Zoom meeting is running..."
 		$JSON = '{"entity_id": "'+$DESTINATION_LIGHT+'", "brightness": 255,"rgb_color": [ 255, 0, 0 ] }'
 		Invoke-RestMethod -ContentType "application/json" -Uri $HA_URL/api/services/light/turn_on -Method POST -Headers $headers -Body $JSON 2>&1 > $null
+		
+		
 	} else {
 		#If a Zoom meeting is NOT running and the light to be mirrored is on, mirror the source light with our status light
 		echo "A Zoom meeting is not running..."		
