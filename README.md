@@ -8,3 +8,4 @@ If you use Home Assistant to control your lights, LightTickler can watch for pro
 <li>Turns blue with Zoom and Valheim are running.
 <li>The Windows version can watch for open microphones, partially implemented.
 <li>The Linux version can watch for open camera streams, partially implemented.
+<li>No, you can't access my Home Assistant frontend with the tokens you find in the scripts...
