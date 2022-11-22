@@ -70,7 +70,7 @@ while($true) {
 	sleep 1
 	
 	#Is there an active Zoom running?  We use SoundVolumeView.exe to determine if a Zoom meeting is active
-	& $SOUNDVOLUMEVIEW /stab "" | .\GetNir "."|findstr /I "Zoom"|findstr /I "Capture" 2>&1 > $null
+	& $SOUNDVOLUMEVIEW /stab "" | .\GetNir "Window Title" "Name=Zoom"|findstr /c:"Zoom Meeting" 2>&1 > $null
 	$ZOOM_RESULT=$?
 	
 	#Is Valheim running?
